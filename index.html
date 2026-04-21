@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PeptideBro — Personal protocol journal</title>
+<meta name="description" content="Private, local-only journal for individuals following a physician-supervised peptide protocol. Not medical advice.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <a class="brand" href="/">PeptideBro</a>
+    <nav>
+      <a href="/privacy.html">Privacy</a>
+      <a href="/terms.html">Terms</a>
+      <a href="mailto:support@peptidebro.app">Support</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <h1>Personal protocol journal</h1>
+    <p class="lede">A private, local-only iOS journal for adults already following a physician-supervised peptide protocol. It does not give medical advice. It does not recommend doses. It helps you record what you already did.</p>
+    <p class="meta">Coming soon to TestFlight and the App Store.</p>
+  </section>
+
+  <section class="grid">
+    <article>
+      <h2>Private by design</h2>
+      <p>No account. No analytics. No network requests. Every dose, stack item, and note lives only on your device.</p>
+    </article>
+    <article>
+      <h2>Log, don't prescribe</h2>
+      <p>A clean interface for recording what you took, where, and when &mdash; with site-rotation tracking based on standard cooldown windows.</p>
+    </article>
+    <article>
+      <h2>Reference, not recommendation</h2>
+      <p>Factual biochemistry summaries for 28 compounds. Regulatory status labeled on every entry. No therapeutic claims.</p>
+    </article>
+  </section>
+
+  <section class="disclaimer">
+    <p><strong>Educational reference only. Not medical advice.</strong> Many compounds referenced are research chemicals not approved for human use. Consult a licensed clinician before starting, stopping, or modifying any protocol.</p>
+  </section>
+</main>
+
+<footer class="wrap">
+  <p>&copy; <span id="year"></span> PeptideBro &middot; <a href="/privacy.html">Privacy</a> &middot; <a href="/terms.html">Terms</a></p>
+</footer>
+
+<script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>
