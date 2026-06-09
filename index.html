@@ -3,46 +3,85 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>PeptideBro — Personal protocol journal</title>
-<meta name="description" content="Private, local-only journal for individuals following a physician-supervised peptide protocol. Not medical advice.">
+<title>PeptideBro — Peptide reconstitution calculator & private tracker</title>
+<meta name="description" content="Enter your vial, water, and dose — get the exact units to draw on a visual syringe. Powder, pre-mixed, or blend. Private site-rotation, reminders, and weight tracking. No account, no ads, all on-device. iOS. Not medical advice.">
+<meta property="og:title" content="PeptideBro — the peptide math, done for you">
+<meta property="og:description" content="Reconstitution calculator + private journal. Exact units to draw, site rotation, weight tracking. No account, no tracking. iOS.">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<!-- TODO: replace the placeholder App Store URL (id0000000000) with the real one once the app is Ready for Sale. -->
 <header>
   <div class="wrap">
     <a class="brand" href="/">PeptideBro</a>
     <nav>
+      <a href="#features">Features</a>
       <a href="/privacy.html">Privacy</a>
       <a href="/terms.html">Terms</a>
       <a href="/support.html">Support</a>
+      <a class="nav-cta" href="https://apps.apple.com/us/app/peptidebro/id0000000000">Get the app</a>
     </nav>
   </div>
 </header>
 
-<main class="wrap">
-  <section class="hero">
-    <h1>Personal protocol journal</h1>
-    <p class="lede">A private, local-only iOS journal for adults already following a physician-supervised peptide protocol. It does not give medical advice. It does not recommend doses. It helps you record what you already did.</p>
-    <p class="meta">Coming soon to TestFlight and the App Store.</p>
+<main>
+  <section class="wrap hero">
+    <div class="hero-copy">
+      <p class="eyebrow">iOS · Free</p>
+      <h1>The peptide math,<br>done for you.</h1>
+      <p class="lede">Enter your vial, your water, and your dose &mdash; PeptideBro shows the exact units to draw on a visual syringe. Powder, pre-mixed, or blend. Plus private site-rotation, reminders, and weight &amp; outcome tracking.</p>
+      <div class="cta-row">
+        <a class="btn-appstore" href="https://apps.apple.com/us/app/peptidebro/id0000000000">
+          <span class="btn-appstore-sub">Download on the</span>
+          <span class="btn-appstore-main">App Store</span>
+        </a>
+      </div>
+      <p class="meta">No account. No tracking. All on your device. Not medical advice &mdash; it does arithmetic on numbers you enter.</p>
+    </div>
+    <div class="hero-shot">
+      <img src="img/screen-calculator.png" width="280" alt="PeptideBro reconstitution calculator showing 10 units to draw on a visual syringe">
+    </div>
   </section>
 
-  <section class="grid">
+  <section id="features" class="wrap features">
+    <article>
+      <h2>Reconstitution calculator</h2>
+      <p>Powder, pre-mixed, or blend vials &rarr; the exact units to draw on a U-100/U-40 syringe, the concentration, and how many doses your vial holds. You enter the numbers; it does the math.</p>
+    </article>
+    <article>
+      <h2>Site-rotation map</h2>
+      <p>See at a glance which injection zones are ready, recovering, or recently used &mdash; based on standard cooldown windows &mdash; with optional reminders.</p>
+    </article>
+    <article>
+      <h2>Progress &amp; outcomes</h2>
+      <p>Log your weight and how you feel and chart the trend over time, so you can actually see whether your protocol is working.</p>
+    </article>
     <article>
       <h2>Private by design</h2>
-      <p>No account. No analytics. No network requests. Every dose, stack item, and note lives only on your device.</p>
-    </article>
-    <article>
-      <h2>Log, don't prescribe</h2>
-      <p>A clean interface for recording what you took, where, and when &mdash; with site-rotation tracking based on standard cooldown windows.</p>
-    </article>
-    <article>
-      <h2>Reference, not recommendation</h2>
-      <p>Factual biochemistry summaries for 28 compounds. Regulatory status labeled on every entry. No therapeutic claims.</p>
+      <p>No account, no analytics, no ads. Your log lives on your device, with optional backup to <em>your own</em> private iCloud &mdash; we never receive it.</p>
     </article>
   </section>
 
-  <section class="disclaimer">
-    <p><strong>Educational reference only. Not medical advice.</strong> Many compounds referenced are research chemicals not approved for human use. Consult a licensed clinician before starting, stopping, or modifying any protocol.</p>
+  <section class="wrap shots">
+    <img src="img/screen-calculator.png" width="240" alt="Reconstitution calculator result">
+    <img src="img/screen-sites.png" width="240" alt="Injection site-rotation map">
+    <img src="img/screen-outcomes.png" width="240" alt="Weight and outcome tracking">
+  </section>
+
+  <section class="wrap trust">
+    <span>No account</span><span>No tracking</span><span>No ads</span><span>Your data stays yours</span>
+  </section>
+
+  <section class="wrap disclaimer">
+    <p><strong>Educational reference and a math utility. Not medical advice.</strong> PeptideBro does not recommend or calculate doses for you &mdash; it converts numbers you enter. Many compounds referenced are research chemicals not approved for human use. Consult a licensed clinician before starting, stopping, or modifying any protocol.</p>
+  </section>
+
+  <section class="wrap cta-final">
+    <h2>Stop guessing your draw.</h2>
+    <a class="btn-appstore" href="https://apps.apple.com/us/app/peptidebro/id0000000000">
+      <span class="btn-appstore-sub">Download on the</span>
+      <span class="btn-appstore-main">App Store</span>
+    </a>
   </section>
 </main>
 
