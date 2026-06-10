@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Peptide Reconstitution Calculator — free, instant, no signup | PeptideBro</title>
+<meta name="description" content="Free peptide reconstitution calculator. Enter your vial (mg), bacteriostatic water (mL), and dose (mcg) — get the exact units to draw on a U-100 or U-40 insulin syringe, plus concentration and doses per vial. No signup. Not medical advice.">
+<link rel="canonical" href="https://peptidebro.app/calculator">
+<meta property="og:title" content="Peptide Reconstitution Calculator — free, instant, no signup">
+<meta property="og:description" content="Vial + water + dose in → exact syringe units out. Concentration, draw volume, and doses per vial. Free, no account.">
+<meta name="apple-itunes-app" content="app-id=6763947732">
+<link rel="stylesheet" href="style.css">
+<style>
+  .calc-card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 24px;
+    margin: 28px 0;
+  }
+  .calc-tabs { display: flex; gap: 8px; margin-bottom: 20px; }
+  .calc-tabs button {
+    flex: 1 1 0;
+    padding: 10px 14px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--bg);
+    color: var(--ink-2);
+    font: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .calc-tabs button[aria-selected="true"] {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: #fff;
+  }
+  .calc-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .calc-fields .full { grid-column: 1 / -1; }
+  .calc-fields label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink-2);
+    margin-bottom: 5px;
+  }
+  .calc-fields .control { display: flex; gap: 8px; }
+  .calc-fields input, .calc-fields select {
+    width: 100%;
+    padding: 10px 12px;
+    font: inherit;
+    font-size: 16px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: #fff;
+    color: var(--ink);
+  }
+  .calc-fields input:focus, .calc-fields select:focus {
+    outline: 2px solid var(--accent);
+    outline-offset: 1px;
+    border-color: var(--accent);
+  }
+  .calc-fields select.unit { width: auto; min-width: 84px; }
+  .calc-result {
+    margin-top: 22px;
+    border-top: 1px solid var(--line);
+    padding-top: 20px;
+    text-align: center;
+  }
+  .calc-result .kicker {
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 11.5px;
+    font-weight: 700;
+    color: var(--accent-2);
+    margin: 0 0 4px;
+  }
+  .calc-units {
+    font-size: 56px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.05;
+    margin: 0;
+  }
+  .calc-units small { font-size: 22px; font-weight: 600; color: var(--ink-2); }
+  .calc-syringe-note { color: var(--ink-2); font-size: 13.5px; margin: 6px 0 0; }
+  .calc-secondary {
+    display: flex;
+    justify-content: center;
+    gap: 28px;
+    flex-wrap: wrap;
+    margin-top: 18px;
+  }
+  .calc-secondary div { text-align: center; }
+  .calc-secondary strong { display: block; font-size: 19px; }
+  .calc-secondary span { font-size: 12.5px; color: var(--ink-2); }
+  .calc-warning {
+    margin: 18px auto 0;
+    max-width: 520px;
+    background: #fef3e2;
+    border: 1px solid #f3ddb5;
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 13.5px;
+    color: #8a5a16;
+    display: none;
+  }
+  .calc-warning.show { display: block; }
+  .calc-empty { color: var(--ink-2); font-size: 14.5px; margin: 4px 0 0; }
+  .app-upsell {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 22px 24px;
+    margin: 32px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    flex-wrap: wrap;
+  }
+  .app-upsell p { margin: 0; font-size: 14.5px; color: var(--ink-2); max-width: 440px; }
+  .app-upsell strong { color: var(--ink); }
+  .faq details {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 14px 18px;
+    margin-bottom: 10px;
+  }
+  .faq summary { font-weight: 600; cursor: pointer; font-size: 15px; }
+  .faq p { color: var(--ink-2); font-size: 14.5px; margin: 10px 0 2px; }
+  @media (max-width: 560px) { .calc-fields { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <a class="brand" href="/">PeptideBro</a>
+    <nav>
+      <a href="/calculator" aria-current="page">Calculator</a>
+      <a href="/#features">Features</a>
+      <a href="/support.html">Support</a>
+      <a class="nav-cta" href="https://apps.apple.com/us/app/peptidebro-tracker/id6763947732">Get the app</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <p class="eyebrow">Free · no signup · nothing stored</p>
+    <h1 style="font-size:38px;line-height:1.1;letter-spacing:-0.02em;margin:0 0 12px;">Peptide reconstitution calculator</h1>
+    <p class="lede">Enter your vial, your water, and your dose — get the exact units to draw on an insulin syringe, the concentration, and how many doses your vial holds. You enter the numbers; this page does the arithmetic.</p>
+
+    <div class="calc-card">
+      <div class="calc-tabs" role="tablist" aria-label="Vial type">
+        <button id="tab-powder" role="tab" aria-selected="true" onclick="setMode('powder')">Powder vial</button>
+        <button id="tab-premixed" role="tab" aria-selected="false" onclick="setMode('premixed')">Pre-mixed vial</button>
+      </div>
+
+      <div class="calc-fields">
+        <div id="field-vial">
+          <label for="vial">Peptide in vial</label>
+          <div class="control">
+            <input id="vial" type="number" inputmode="decimal" min="0" step="any" placeholder="e.g. 5" oninput="calc()">
+            <select class="unit" id="vial-unit" onchange="calc()">
+              <option value="mg" selected>mg</option>
+              <option value="mcg">mcg</option>
+            </select>
+          </div>
+        </div>
+        <div id="field-water">
+          <label for="water">Bacteriostatic water added</label>
+          <div class="control">
+            <input id="water" type="number" inputmode="decimal" min="0" step="any" placeholder="e.g. 2" oninput="calc()">
+            <select class="unit" disabled><option>mL</option></select>
+          </div>
+        </div>
+        <div id="field-conc" style="display:none;" class="full">
+          <label for="conc">Concentration printed on the vial</label>
+          <div class="control">
+            <input id="conc" type="number" inputmode="decimal" min="0" step="any" placeholder="e.g. 2.5" oninput="calc()">
+            <select class="unit" id="conc-unit" onchange="calc()">
+              <option value="mgml" selected>mg/mL</option>
+              <option value="mcgml">mcg/mL</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label for="dose">Your dose</label>
+          <div class="control">
+            <input id="dose" type="number" inputmode="decimal" min="0" step="any" placeholder="e.g. 250" oninput="calc()">
+            <select class="unit" id="dose-unit" onchange="calc()">
+              <option value="mcg" selected>mcg</option>
+              <option value="mg">mg</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label for="syringe">Syringe</label>
+          <select id="syringe" onchange="calc()">
+            <option value="100" selected>U-100 insulin syringe</option>
+            <option value="40">U-40 insulin syringe</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="calc-result">
+        <p class="kicker">Draw to this mark</p>
+        <p class="calc-units"><span id="out-units">—</span> <small>units</small></p>
+        <p class="calc-syringe-note" id="out-note">Fill in your numbers above.</p>
+        <div class="calc-secondary">
+          <div><strong id="out-volume">—</strong><span>draw volume</span></div>
+          <div><strong id="out-conc">—</strong><span>concentration</span></div>
+          <div id="out-doses-wrap"><strong id="out-doses">—</strong><span>full doses / vial</span></div>
+        </div>
+        <p class="calc-warning" id="warning"></p>
+      </div>
+    </div>
+
+    <div class="app-upsell">
+      <p><strong>Want this saved, plus the rest of your protocol?</strong> The PeptideBro app adds a visual syringe, two-peptide blend mode, saved calcs, a private dose log, site-rotation map, and reminders — no account, all on your device.</p>
+      <a class="btn-appstore" href="https://apps.apple.com/us/app/peptidebro-tracker/id6763947732">
+        <span class="btn-appstore-sub">Download on the</span>
+        <span class="btn-appstore-main">App Store</span>
+      </a>
+    </div>
+
+    <section class="faq" aria-labelledby="faq-title">
+      <h2 id="faq-title" style="font-size:22px;letter-spacing:-0.015em;">Reconstitution math, explained</h2>
+      <details>
+        <summary>How does the reconstitution calculation work?</summary>
+        <p>Three steps of arithmetic. Concentration = peptide in the vial ÷ water added (e.g. 5 mg ÷ 2 mL = 2.5 mg/mL, or 2,500 mcg/mL). Draw volume = your dose ÷ concentration (250 mcg ÷ 2,500 mcg/mL = 0.1 mL). Syringe units = draw volume × 100 on a U-100 syringe (0.1 mL = 10 units).</p>
+      </details>
+      <details>
+        <summary>How many units is my dose on an insulin syringe?</summary>
+        <p>It depends on your concentration — which depends on how much water you added. The same 250 mcg dose can be 5, 10, or 20 units in different vials. That's exactly what this calculator computes: dose ÷ concentration × syringe factor.</p>
+      </details>
+      <details>
+        <summary>What's the difference between U-100 and U-40 syringes?</summary>
+        <p>The markings. A U-100 syringe has 100 units per mL; a U-40 has 40 units per mL. The same liquid volume reads as a different number of units, so always match the calculator's syringe setting to the syringe in your hand.</p>
+      </details>
+      <details>
+        <summary>How many doses are in my vial?</summary>
+        <p>Total peptide in the vial ÷ your dose, rounded down. A 5 mg (5,000 mcg) vial at 250 mcg per dose holds 20 full doses. The calculator shows this automatically in powder mode.</p>
+      </details>
+      <details>
+        <summary>Is this medical advice?</summary>
+        <p>No. This is a math utility: it converts numbers you enter and does not recommend, adjust, or validate any dose or compound. Many peptides are research chemicals not approved for human use. Consult a licensed clinician before starting, stopping, or changing anything health-related.</p>
+      </details>
+    </section>
+
+    <section class="wrap disclaimer" style="padding-left:20px;">
+      <p><strong>Educational reference and a math utility. Not medical advice.</strong> PeptideBro does not recommend doses — it converts numbers you enter. Nothing you type here is sent or stored anywhere; the math runs entirely in your browser. Consult a licensed clinician before starting, stopping, or modifying any protocol.</p>
+    </section>
+  </div>
+</main>
+
+<footer class="wrap">
+  <p>&copy; <span id="year"></span> PeptideBro &middot; <a href="/privacy.html">Privacy</a> &middot; <a href="/terms.html">Terms</a> &middot; <a href="/support.html">Support</a></p>
+</footer>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "name": "PeptideBro Reconstitution Calculator",
+      "url": "https://peptidebro.app/calculator",
+      "applicationCategory": "UtilitiesApplication",
+      "operatingSystem": "Any",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "description": "Free peptide reconstitution calculator: enter vial amount, water volume, and dose to get exact insulin-syringe units, concentration, and doses per vial."
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How does the reconstitution calculation work?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Concentration = peptide in the vial divided by water added (e.g. 5 mg / 2 mL = 2.5 mg/mL). Draw volume = your dose divided by concentration (250 mcg / 2,500 mcg/mL = 0.1 mL). Syringe units = draw volume x 100 on a U-100 syringe (0.1 mL = 10 units)." }
+        },
+        {
+          "@type": "Question",
+          "name": "How many units is my dose on an insulin syringe?",
+          "acceptedAnswer": { "@type": "Answer", "text": "It depends on your concentration, which depends on how much water you added. The same 250 mcg dose can be 5, 10, or 20 units in different vials. Units = dose / concentration x syringe factor." }
+        },
+        {
+          "@type": "Question",
+          "name": "What's the difference between U-100 and U-40 syringes?",
+          "acceptedAnswer": { "@type": "Answer", "text": "A U-100 syringe has 100 units per mL; a U-40 has 40 units per mL. The same liquid volume reads as a different number of units, so match the setting to the syringe in your hand." }
+        },
+        {
+          "@type": "Question",
+          "name": "How many doses are in my vial?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Total peptide in the vial divided by your dose, rounded down. A 5 mg (5,000 mcg) vial at 250 mcg per dose holds 20 full doses." }
+        },
+        {
+          "@type": "Question",
+          "name": "Is this medical advice?",
+          "acceptedAnswer": { "@type": "Answer", "text": "No. This is a math utility: it converts numbers you enter and does not recommend, adjust, or validate any dose or compound. Consult a licensed clinician before starting, stopping, or changing anything health-related." }
+        }
+      ]
+    }
+  ]
+}
+</script>
+
+<script>
+document.getElementById('year').textContent = new Date().getFullYear();
+
+let mode = 'powder';
+
+function setMode(m) {
+  mode = m;
+  document.getElementById('tab-powder').setAttribute('aria-selected', m === 'powder');
+  document.getElementById('tab-premixed').setAttribute('aria-selected', m === 'premixed');
+  document.getElementById('field-vial').style.display = m === 'powder' ? '' : 'none';
+  document.getElementById('field-water').style.display = m === 'powder' ? '' : 'none';
+  document.getElementById('field-conc').style.display = m === 'premixed' ? '' : 'none';
+  document.getElementById('out-doses-wrap').style.display = m === 'powder' ? '' : 'none';
+  calc();
+}
+
+function num(id) {
+  const v = parseFloat(document.getElementById(id).value);
+  return isFinite(v) && v > 0 ? v : null;
+}
+
+function fmt(n, digits) {
+  return n.toLocaleString('en-US', { maximumFractionDigits: digits });
+}
+
+function calc() {
+  const doseRaw = num('dose');
+  const doseMcg = doseRaw === null ? null :
+    (document.getElementById('dose-unit').value === 'mg' ? doseRaw * 1000 : doseRaw);
+  const factor = parseInt(document.getElementById('syringe').value, 10);
+
+  let concMcgMl = null;   // mcg per mL
+  let vialMcg = null;
+
+  if (mode === 'powder') {
+    const vialRaw = num('vial');
+    vialMcg = vialRaw === null ? null :
+      (document.getElementById('vial-unit').value === 'mg' ? vialRaw * 1000 : vialRaw);
+    const waterMl = num('water');
+    if (vialMcg !== null && waterMl !== null) concMcgMl = vialMcg / waterMl;
+  } else {
+    const concRaw = num('conc');
+    if (concRaw !== null) {
+      concMcgMl = document.getElementById('conc-unit').value === 'mgml' ? concRaw * 1000 : concRaw;
+    }
+  }
+
+  const outUnits = document.getElementById('out-units');
+  const outNote = document.getElementById('out-note');
+  const outVolume = document.getElementById('out-volume');
+  const outConc = document.getElementById('out-conc');
+  const outDoses = document.getElementById('out-doses');
+  const warning = document.getElementById('warning');
+  warning.className = 'calc-warning';
+
+  if (concMcgMl === null || doseMcg === null) {
+    outUnits.textContent = '—';
+    outNote.textContent = 'Fill in your numbers above.';
+    outVolume.textContent = '—';
+    outConc.textContent = '—';
+    outDoses.textContent = '—';
+    return;
+  }
+
+  const drawMl = doseMcg / concMcgMl;
+  const units = drawMl * factor;
+
+  outUnits.textContent = fmt(units, units < 10 ? 1 : 0);
+  outNote.textContent = 'on a U-' + factor + ' insulin syringe';
+  outVolume.textContent = fmt(drawMl, drawMl < 0.1 ? 3 : 2) + ' mL';
+  outConc.textContent = fmt(concMcgMl, 0) + ' mcg/mL';
+  outDoses.textContent = (mode === 'powder' && vialMcg !== null) ? fmt(Math.floor(vialMcg / doseMcg), 0) : '—';
+
+  if (drawMl > 1.0) {
+    warning.textContent = 'This draw is ' + fmt(drawMl, 2) + ' mL — more than a standard 1 mL insulin syringe holds. Double-check your numbers, or you would need multiple draws.';
+    warning.className = 'calc-warning show';
+  } else if (units < 2) {
+    warning.textContent = 'This draw is under 2 units, which is hard to measure accurately on an insulin syringe. Double-check your numbers; adding less water (powder mode) makes the draw larger and easier to measure.';
+    warning.className = 'calc-warning show';
+  }
+}
+</script>
+</body>
+</html>
