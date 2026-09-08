@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Peptide Reconstitution Calculator — free, instant, no signup | PeptideBro</title>
-<meta name="description" content="Free peptide reconstitution calculator. Enter your vial (mg), bacteriostatic water (mL), and dose (mcg) — get the exact units to draw on a U-100 or U-40 insulin syringe, plus concentration and doses per vial. No signup. Not medical advice.">
+<meta name="description" content="Free peptide reconstitution calculator. Enter your vial (mg), bacteriostatic water (mL), and dose (mcg) — see calculated syringe markings on a U-100 or U-40 insulin syringe, plus concentration and doses per vial. No signup. Not medical advice.">
 <link rel="canonical" href="https://peptidebro.app/calculator">
 <meta property="og:title" content="Peptide Reconstitution Calculator — free, instant, no signup">
 <meta property="og:description" content="Vial + water + dose in → exact syringe units out. Concentration, draw volume, and doses per vial. Free, no account.">
@@ -151,7 +151,7 @@
   <div class="wrap">
     <p class="eyebrow">Free · no signup · nothing stored</p>
     <h1 style="font-size:38px;line-height:1.1;letter-spacing:-0.02em;margin:0 0 12px;">Peptide reconstitution calculator</h1>
-    <p class="lede">Enter your vial, your water, and your dose — get the exact units to draw on an insulin syringe, the concentration, and how many doses your vial holds. You enter the numbers; this page does the arithmetic.</p>
+    <p class="lede">Enter your vial, your water, and your dose — see calculated syringe markings on an insulin syringe, the concentration, and how many doses your vial holds. You enter the numbers; this page does the arithmetic.</p>
 
     <div class="calc-card">
       <div class="calc-tabs" role="tablist" aria-label="Vial type">
@@ -216,6 +216,8 @@
           <div id="out-doses-wrap"><strong id="out-doses">—</strong><span>full doses / vial</span></div>
         </div>
         <p class="calc-warning" id="warning"></p>
+        <button id="transfer-calculation" type="button" disabled style="min-height:48px;width:100%;margin-top:16px;border-radius:12px;border:0;background:#ddb052;color:#090c16;font:inherit;font-weight:650;cursor:pointer">Keep this calculation in PeptideBro</button>
+        <p id="transfer-status" aria-live="polite" style="font-size:13px;color:#64748b">Requires PeptideBro 1.3 or later. Preview before saving.</p>
       </div>
     </div>
 
@@ -252,7 +254,7 @@
     </section>
 
     <section class="wrap disclaimer" style="padding-left:20px;">
-      <p><strong>Educational reference and a math utility. Not medical advice.</strong> PeptideBro does not recommend doses — it converts numbers you enter. Nothing you type here is sent or stored anywhere; the math runs entirely in your browser. Consult a licensed clinician before starting, stopping, or modifying any protocol.</p>
+      <p><strong>Educational reference and a math utility. Not medical advice.</strong> PeptideBro does not recommend doses — it converts numbers you enter. The math runs in your browser. If you choose to transfer or share a calculation, its inputs are included in the link or file you create; review them before sharing. Consult a licensed clinician before starting, stopping, or modifying any protocol.</p>
     </section>
   </div>
 </main>
@@ -308,6 +310,7 @@
 }
 </script>
 
+<script src="/js/calculation-transfer.js"></script>
 <script>
 document.getElementById('year').textContent = new Date().getFullYear();
 
@@ -334,6 +337,7 @@ function fmt(n, digits) {
 }
 
 function calc() {
+  document.getElementById("transfer-calculation").disabled = true;
   const doseRaw = num('dose');
   const doseMcg = doseRaw === null ? null :
     (document.getElementById('dose-unit').value === 'mg' ? doseRaw * 1000 : doseRaw);
@@ -373,6 +377,7 @@ function calc() {
   }
 
   const drawMl = doseMcg / concMcgMl;
+  document.getElementById("transfer-calculation").disabled = !Number.isFinite(drawMl) || drawMl <= 0;
   const units = drawMl * factor;
 
   outUnits.textContent = fmt(units, units < 10 ? 1 : 0);
@@ -389,6 +394,22 @@ function calc() {
     warning.className = 'calc-warning show';
   }
 }
+
+document.getElementById('transfer-calculation').addEventListener('click', function () {
+  try {
+    const vialRaw = num('vial') || 0;
+    const value = {
+      format: 'peptidebro-calculation', version: 1, mode,
+      vialMg: mode === 'powder' ? vialRaw / (document.getElementById('vial-unit').value === 'mcg' ? 1000 : 1) : 0,
+      waterML: mode === 'powder' ? num('water') : 0,
+      concentration: mode === 'premixed' ? num('conc') : 0,
+      concentrationUnit: document.getElementById('conc-unit').value === 'mgml' ? 'mgPerML' : 'mcgPerML',
+      blendBMg: 0, amount: num('dose'), amountUnit: document.getElementById('dose-unit').value,
+      syringe: document.getElementById('syringe').value === '100' ? 'u100' : 'u40', barrel: 'full10'
+    };
+    location.href = PeptideBroTransfer.link(value, location.origin);
+  } catch (error) { document.getElementById('transfer-status').textContent = error.message; }
+});
 </script>
 </body>
 </html>

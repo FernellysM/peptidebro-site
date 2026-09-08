@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer"><meta name="robots" content="noindex">
+<title>Keep your calculation · PeptideBro</title>
+<link rel="stylesheet" href="/style.css">
+<style>
+html{background:#090c16}body{min-height:100vh;background:#090c16;color:#f3f5f9}main{max-width:660px;margin:48px auto;padding:24px}.eyebrow{color:#ddb052;letter-spacing:.14em;font-size:12px;font-weight:700}h1{font-size:38px;line-height:1.1;letter-spacing:-.03em}.card{background:#131825;border:1px solid #293044;border-radius:24px;padding:24px;margin:24px 0}.muted{color:#a3aabc}.result{font-size:44px;line-height:1.1;font-weight:700;color:#fccb66;margin:20px 0 8px}a,button{color:#fccb66}button,.button{display:block;width:100%;padding:16px;border-radius:14px;border:1px solid #484233;background:#ddb052;color:#090c16;text-align:center;text-decoration:none;font:inherit;font-weight:650;margin:12px 0;cursor:pointer;box-sizing:border-box}.secondary{background:transparent;color:#fccb66}#warning{color:#f8b66c}button:focus-visible,a:focus-visible{outline:3px solid #fff;outline-offset:3px}small{display:block}.error{color:#ffba98}dl{display:grid;grid-template-columns:1fr 1fr;gap:10px}dt{color:#a3aabc}dd{margin:0;text-align:right}
+</style>
+</head>
+<body><main>
+<p class="eyebrow">PEPTIDEBRO · SHARED INPUTS</p>
+<h1>Keep your calculation.</h1>
+<p class="muted">Review the values, then open them in PeptideBro. The result below is recomputed in your browser.</p>
+<p id="error" class="error" role="alert" hidden></p>
+<div id="content" hidden>
+<section class="card" aria-label="Calculation preview"><dl id="inputs"></dl><p class="result" id="units"></p><p id="volume" class="muted"></p><p id="warning"></p></section>
+<a id="open-app" class="button">Open in PeptideBro</a>
+<button id="download" class="secondary">Download calculation file</button>
+<a class="button secondary" href="https://apps.apple.com/us/app/peptidebro-peptide-calculator/id6763947732">Get PeptideBro for iPhone</a>
+<p class="muted">Requires PeptideBro 1.2 or later. After installing, return to this page and tap Open, or open the downloaded file. Nothing is saved in the app until you confirm.</p>
+</div>
+<p class="muted"><small>Only arithmetic inputs are included. No personal notes or history. Values remain in your browser unless you explicitly share or download them. This is a math utility, not a dose recommendation.</small></p>
+<a href="/calculator">Back to calculator</a>
+</main><script src="/js/calculation-transfer.js"></script><script>
+'use strict';
+try {
+  const payload = location.hash.slice(1), v = PeptideBroTransfer.decode(payload), r = PeptideBroTransfer.calculate(v);
+  const format = n => new Intl.NumberFormat('en-US', {maximumFractionDigits: 4}).format(n);
+  const fields = [['Mode', v.mode], ['Entered amount', format(v.amount) + ' ' + v.amountUnit], ['Syringe', v.syringe === 'u100' ? 'U-100' : 'U-40']];
+  if (v.mode === 'premixed') fields.push(['Concentration', format(v.concentration) + (v.concentrationUnit === 'mgPerML' ? ' mg/mL' : ' mcg/mL')]);
+  else { fields.push([v.mode === 'blend' ? 'Compound A' : 'Vial amount', format(v.vialMg) + ' mg'], ['Liquid volume', format(v.waterML) + ' mL']); if (v.mode === 'blend') fields.push(['Compound B', format(v.blendBMg) + ' mg']); }
+  const list = document.getElementById('inputs');
+  for (const [label, value] of fields) { const dt = document.createElement('dt'), dd = document.createElement('dd'); dt.textContent = label; dd.textContent = value; list.append(dt, dd); }
+  document.getElementById('units').textContent = format(r.units) + ' units';
+  document.getElementById('volume').textContent = format(r.volumeML) + ' mL · ' + format(r.concentrationMgML) + ' mg/mL';
+  const capacity = {half03: .3, half05: .5, full10: 1}[v.barrel];
+  document.getElementById('warning').textContent = r.volumeML > capacity ? 'This calculated volume exceeds the selected barrel capacity.' : r.units < 2 ? 'This draw is below 2 units and may be difficult to measure.' : '';
+  document.getElementById('open-app').href = 'peptidebro://calculation#' + PeptideBroTransfer.encode(v);
+  document.getElementById('download').addEventListener('click', () => {
+    const url = URL.createObjectURL(new Blob([JSON.stringify(v, null, 2)], {type: 'application/vnd.peptidebro.calculation+json'}));
+    const a = document.createElement('a'); a.href = url; a.download = 'PeptideBro-calculation.peptidebrocalc'; a.click(); setTimeout(() => URL.revokeObjectURL(url), 1000);
+  });
+  document.getElementById('content').hidden = false;
+} catch (error) { const el = document.getElementById('error'); el.textContent = error.message; el.hidden = false; }
+</script></body></html>

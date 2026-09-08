@@ -1,0 +1,10 @@
+const test = require('node:test');
+const assert = require('node:assert/strict');
+const t = require('../js/calculation-transfer.js');
+const v = {format:'peptidebro-calculation',version:1,mode:'powder',vialMg:5,waterML:2,concentration:0,concentrationUnit:'mgPerML',blendBMg:0,amount:250,amountUnit:'mcg',syringe:'u100',barrel:'full10'};
+test('cross-platform input roundtrip and units', () => { const r = t.decode(t.encode(v)); assert.equal(t.calculate(r).units,10); assert.equal(r.amount,250); });
+test('U40 and mg conversion', () => { assert.equal(t.calculate(t.validate({...v,amount:.25,amountUnit:'mg',syringe:'u40'})).units,4); });
+test('premixed mcg/mL', () => { assert.equal(t.calculate(t.validate({...v,mode:'premixed',concentration:2500,concentrationUnit:'mcgPerML',waterML:0})).units,10); });
+test('notes and personal fields are excluded', () => { const result=t.decode(t.encode({...v,notes:'private',pepId:'personal',history:[1]})); assert.equal(result.notes,undefined); assert.equal(result.pepId,undefined); assert.equal(result.history,undefined); });
+test('invalid, infinite, unknown and incomplete inputs rejected', () => { for (const bad of [{...v,amount:NaN},{...v,waterML:0},{...v,version:2},{...v,syringe:'IU'},{...v,amount:Infinity},{...v,amount:1e308,amountUnit:'mg'}]) assert.throws(()=>t.encode(bad)); assert.throws(()=>t.decode('!')); assert.throws(()=>t.decode('a'.repeat(44001))); });
+test('transfer never puts input values into a query', () => { const url=new URL(t.link(v)); assert.equal(url.search,''); assert.ok(url.hash); assert.equal(url.pathname,'/transfer.html'); });
