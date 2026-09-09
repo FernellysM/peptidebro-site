@@ -281,3 +281,49 @@ footer a {
   .hero-shot img { width: 230px; }
   .nav-cta { display: none; }
 }
+
+/* Download pages: keep the primary action ahead of imagery on phones. */
+.download-page a:focus-visible { outline: 3px solid var(--accent-2); outline-offset: 4px; }
+.download-page .eyebrow, .download-page .btn-appstore-sub { font-size: 14px; }
+.download-page .features p, .download-page .app-upsell p { font-size: 16px; }
+.download-page header .wrap { gap: 16px; flex-wrap: wrap; }
+.download-page header nav { display: flex; align-items: center; flex-wrap: wrap; gap: 10px 18px; }
+.download-page header nav a { margin-left: 0; padding-top: 10px; padding-bottom: 10px; }
+.landing header .wrap { max-width: 960px; }
+.landing .hero-copy { min-width: 0; }
+.landing .hero h1 { font-size: clamp(32px, 4vw, 44px); }
+.landing .hero-shot { margin: 0; width: 280px; max-width: 100%; }
+.landing .hero-shot img { display: block; max-width: 100%; height: auto; }
+.landing figcaption { color: var(--ink-2); font-size: 14px; text-align: center; margin-top: 12px; }
+.landing .cta-row { display: flex; flex-direction: column; align-items: flex-start; gap: 18px; }
+.try-calculator, .text-link { color: var(--accent-2); font-size: 16px; font-weight: 600; text-underline-offset: 4px; }
+.landing .features { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.landing .app-tour { margin-top: 64px; }
+.landing .section-intro { text-align: center; max-width: 600px; margin: auto; }
+.landing .section-intro h2, .landing .free-details h2 { font-size: 28px; line-height: 1.2; letter-spacing: -.015em; margin: 0 0 16px; }
+.landing .shots { margin: 32px auto 16px; gap: 32px; }
+.landing .shots figure { margin: 0; width: 260px; max-width: 100%; }
+.landing .shots img { display: block; width: 100%; height: auto; }
+.landing .sample-note { text-align: center; }
+.landing .free-details { margin-top: 56px; border-top: 1px solid var(--line); padding-top: 32px; }
+.landing .free-details p { margin-bottom: 20px; }
+.mobile-download { display: none; }
+
+@media (max-width: 720px) {
+  .download-page { padding-bottom: calc(96px + env(safe-area-inset-bottom)); }
+  .download-page main { padding: 32px 0 48px; }
+  .landing .hero { flex-direction: column; text-align: left; gap: 32px; }
+  .landing .hero .cta-row { align-items: flex-start; }
+  .landing .hero-shot { width: 260px; }
+  .landing .hero-shot img { width: 100%; }
+  .landing .features { grid-template-columns: 1fr; margin-top: 40px; }
+  .mobile-download {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    position: fixed; z-index: 20; left: 12px; right: 12px;
+    bottom: calc(12px + env(safe-area-inset-bottom)); min-height: 64px;
+    padding: 10px 16px; border-radius: 14px; background: var(--ink); color: #fff;
+    box-shadow: 0 4px 24px rgba(15, 23, 42, .2); text-decoration: none;
+    font-size: 16px; font-weight: 700; line-height: 1.4;
+  }
+  .mobile-download span { font-size: 14px; font-weight: 400; color: #d6dfed; }
+}
