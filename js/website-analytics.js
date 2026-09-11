@@ -3,7 +3,7 @@
   'use strict';
   const id = 'G-23VJH8NXMV';
   const key = 'peptidebro-website-analytics';
-  const pages = new Map([['/', 'Home'], ['/index.html', 'Home'], ['/calculator', 'Calculator'], ['/calculator.html', 'Calculator'], ['/support.html', 'Support'], ['/privacy.html', 'Privacy'], ['/terms.html', 'Terms'], ['/website-privacy.html', 'Website privacy']]);
+  const pages = new Map([["/tools", "Free tools"],["/tools.html", "Free tools"],["/mg-to-mcg", "Mass converter"],["/mg-to-mcg.html", "Mass converter"],["/concentration-calculator", "Concentration calculator"],["/concentration-calculator.html", "Concentration calculator"],["/ml-to-units", "Volume converter"],["/ml-to-units.html", "Volume converter"],["/reconstitution-math", "Math guide"],["/reconstitution-math.html", "Math guide"],['/', 'Home'], ['/index.html', 'Home'], ['/calculator', 'Calculator'], ['/calculator.html', 'Calculator'], ['/support.html', 'Support'], ['/privacy.html', 'Privacy'], ['/terms.html', 'Terms'], ['/website-privacy.html', 'Website privacy']]);
   if (!pages.has(location.pathname) || location.search || location.hash) return;
   const blocked = navigator.globalPrivacyControl || navigator.doNotTrack === '1';
   let choice = null;
