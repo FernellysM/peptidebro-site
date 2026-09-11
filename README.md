@@ -44,3 +44,7 @@ Plain HTML, no build. Just open `index.html` in a browser, or:
 python3 -m http.server --directory ~/peptidebro-site 8000
 # then visit http://localhost:8000
 ```
+
+## Website measurement
+Google Search Console uses the verification meta tag in index.html. Keep it when editing.
+GA4 G-23VJH8NXMV measures consenting visits and app_store_click via js/website-analytics.js; enhanced measurement is disabled. Transfer pages and query/fragment URLs are excluded. Website-only privacy details are in website-privacy.html. Preserve the analytics script and website notice link when regenerating privacy.html or terms.html from app legal sources.
