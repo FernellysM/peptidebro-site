@@ -8,7 +8,6 @@
 <link rel="canonical" href="https://peptidebro.app/calculator">
 <meta property="og:title" content="Peptide Reconstitution Calculator — free, instant, no signup">
 <meta property="og:description" content="Vial + water + dose in → exact syringe units out. Concentration, draw volume, and doses per vial. Free, no account.">
-<meta name="apple-itunes-app" content="app-id=6763947732">
 <link rel="stylesheet" href="style.css">
 <style>
   .calc-card {
@@ -108,20 +107,6 @@
   }
   .calc-warning.show { display: block; }
   .calc-empty { color: var(--ink-2); font-size: 14.5px; margin: 4px 0 0; }
-  .app-upsell {
-    background: var(--card);
-    border: 1px solid var(--line);
-    border-radius: var(--radius);
-    padding: 22px 24px;
-    margin: 32px 0;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 18px;
-    flex-wrap: wrap;
-  }
-  .app-upsell p { margin: 0; font-size: 14.5px; color: var(--ink-2); max-width: 440px; }
-  .app-upsell strong { color: var(--ink); }
   .faq details {
     background: var(--card);
     border: 1px solid var(--line);
@@ -144,7 +129,6 @@
       <a href="/calculator" aria-current="page">Calculator</a>
       <a href="/tools">Free tools</a>
       <a href="/support.html">Support</a>
-      <a class="nav-cta" href="https://apps.apple.com/us/app/peptidebro-tracker/id6763947732">Get the app</a>
     </nav>
   </div>
 </header>
@@ -218,17 +202,7 @@
           <div id="out-doses-wrap"><strong id="out-doses">—</strong><span>full doses / vial</span></div>
         </div>
         <p class="calc-warning" id="warning"></p>
-        <button id="transfer-calculation" type="button" disabled style="min-height:48px;width:100%;margin-top:16px;border-radius:12px;border:0;background:#ddb052;color:#090c16;font:inherit;font-weight:650;cursor:pointer">Keep this calculation in PeptideBro</button>
-        <p id="transfer-status" aria-live="polite" style="font-size:13px;color:#64748b">Requires PeptideBro 1.3 or later. Preview before saving.</p>
       </div>
-    </div>
-
-    <div class="app-upsell">
-      <p><strong>Want this saved, plus the rest of your protocol?</strong> The PeptideBro app adds a visual syringe, two-peptide blend mode, saved calcs, a private dose log, site-rotation map, and reminders — no account, all on your device.</p>
-      <a class="btn-appstore" href="https://apps.apple.com/us/app/peptidebro-tracker/id6763947732">
-        <span class="btn-appstore-sub">Download on the</span>
-        <span class="btn-appstore-main">App Store</span>
-      </a>
     </div>
 
     <section class="faq" aria-labelledby="faq-title">
@@ -257,7 +231,7 @@
 
 <section class="wrap tools-main"><h2>Choose a free web tool</h2><nav class="tool-links" aria-label="Free calculators"><a href="/mg-to-mcg"><strong>mg ↔ mcg</strong><span>Convert milligrams and micrograms.</span></a><a href="/concentration-calculator"><strong>Concentration</strong><span>Calculate mg/mL and mcg/mL.</span></a><a href="/ml-to-units"><strong>mL ↔ U-100 units</strong><span>Understand volume and syringe markings.</span></a><a href="/reconstitution-math"><strong>Understand the math</strong><span>Follow a worked example and check units.</span></a></nav></section>
     <section class="wrap disclaimer" style="padding-left:20px;">
-      <p><strong>Educational reference and a math utility. Not medical advice.</strong> PeptideBro does not recommend doses — it converts numbers you enter. The math runs in your browser. If you choose to transfer or share a calculation, its inputs are included in the link or file you create; review them before sharing. Consult a licensed clinician before starting, stopping, or modifying any protocol.</p>
+      <p><strong>Educational reference and a math utility. Not medical advice.</strong> PeptideBro does not recommend doses — it converts numbers you enter. The math runs in your browser. Consult a licensed clinician before starting, stopping, or modifying any protocol.</p>
     </section>
   </div>
 </main>
@@ -313,7 +287,6 @@
 }
 </script>
 
-<script src="/js/calculation-transfer.js"></script>
 <script>
 document.getElementById('year').textContent = new Date().getFullYear();
 
@@ -340,7 +313,6 @@ function fmt(n, digits) {
 }
 
 function calc() {
-  document.getElementById("transfer-calculation").disabled = true;
   const doseRaw = num('dose');
   const doseMcg = doseRaw === null ? null :
     (document.getElementById('dose-unit').value === 'mg' ? doseRaw * 1000 : doseRaw);
@@ -380,7 +352,6 @@ function calc() {
   }
 
   const drawMl = doseMcg / concMcgMl;
-  document.getElementById("transfer-calculation").disabled = !Number.isFinite(drawMl) || drawMl <= 0;
   const units = drawMl * factor;
 
   outUnits.textContent = fmt(units, units < 10 ? 1 : 0);
@@ -398,21 +369,6 @@ function calc() {
   }
 }
 
-document.getElementById('transfer-calculation').addEventListener('click', function () {
-  try {
-    const vialRaw = num('vial') || 0;
-    const value = {
-      format: 'peptidebro-calculation', version: 1, mode,
-      vialMg: mode === 'powder' ? vialRaw / (document.getElementById('vial-unit').value === 'mcg' ? 1000 : 1) : 0,
-      waterML: mode === 'powder' ? num('water') : 0,
-      concentration: mode === 'premixed' ? num('conc') : 0,
-      concentrationUnit: document.getElementById('conc-unit').value === 'mgml' ? 'mgPerML' : 'mcgPerML',
-      blendBMg: 0, amount: num('dose'), amountUnit: document.getElementById('dose-unit').value,
-      syringe: document.getElementById('syringe').value === '100' ? 'u100' : 'u40', barrel: 'full10'
-    };
-    location.href = PeptideBroTransfer.link(value, location.origin);
-  } catch (error) { document.getElementById('transfer-status').textContent = error.message; }
-});
 </script>
 </body>
 </html>

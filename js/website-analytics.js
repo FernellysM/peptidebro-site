@@ -37,7 +37,7 @@
   const panel = document.createElement('section');
   panel.setAttribute('aria-label', 'Website analytics choice');
   panel.style.cssText = 'position:fixed;bottom:16px;left:16px;right:16px;z-index:1000;max-width:600px;background:#fff;color:#17251c;padding:16px;border:1px solid #bcc8bf;border-radius:12px;box-shadow:0 4px 20px #0002;font:14px/1.5 system-ui';
-  panel.innerHTML = '<p style="margin:0 0 10px">Allow optional analytics cookies to measure visits and App Store clicks? Calculator inputs are never collected. <a href="/website-privacy.html">Details</a></p>';
+  panel.innerHTML = '<p style="margin:0 0 10px">Allow optional analytics cookies to measure visits and App Store clicks? Tool inputs are never collected. <a href="/website-privacy.html">Details</a></p>';
   function choose(value) {
     try { localStorage.setItem(key, value); } catch {}
     panel.remove();
