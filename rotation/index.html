@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Site Rotation Log: a private log of the body areas you used</title>
+  <meta name="description" content="A free, private log of which body area you used last, so you do not repeat one. Front and back map, history, printable sheet, CSV and JSON export. Stored only in your browser. By PeptideBro.">
+  <meta name="color-scheme" content="light">
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="styles.css">
+  <script type="module" src="app.js"></script>
+<link rel="canonical" href="https://peptidebro.app/rotation/">
+</head>
+<body>
+  <a class="skip" href="#areas">Skip to the area list</a>
+  <header class="top">
+    <div class="wrap">
+      <p class="brand">PeptideBro <span>Site Rotation Log</span></p>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="intro" aria-labelledby="title">
+      <p class="print-only">PeptideBro rotation sheet</p>
+      <h1 id="title">Which area did you use last?</h1>
+      <p class="lede">Tap the area you used. The log keeps the date, marks the area you used last and shows which one has gone longest without an entry.</p>
+      <p class="private" id="private">Stored only in this browser. No account, nothing uploaded.</p>
+    </section>
+
+    <div id="notice" class="notice" role="alert" hidden></div>
+
+    <section class="pair" aria-label="Rotation summary">
+      <div class="pill-card last">
+        <p class="k"><span class="glyph" aria-hidden="true">&#9679;</span> Last used</p>
+        <p class="v" id="sum-last">Nothing logged yet</p>
+      </div>
+      <div class="pill-card rest">
+        <p class="k"><span class="glyph" aria-hidden="true">&#9675;</span> Longest rest</p>
+        <p class="v" id="sum-rest">-</p>
+      </div>
+    </section>
+
+    <section class="logger" aria-labelledby="log-title">
+      <h2 id="log-title" class="sr">Log an entry</h2>
+      <div class="fields">
+        <label>Date <input type="date" id="f-date" required></label>
+        <label>Label (optional) <input type="text" id="f-label" maxlength="40" autocomplete="off" spellcheck="false" placeholder="Your own words, up to 40 characters"></label>
+      </div>
+      <p class="hint">Then tap an area on the map or in the list to log it.</p>
+
+      <div class="maps">
+        <figure>
+          <svg id="map-front" viewBox="0 0 200 420"></svg>
+          <figcaption>Front <span>(facing you)</span></figcaption>
+        </figure>
+        <figure>
+          <svg id="map-back" viewBox="0 0 200 420"></svg>
+          <figcaption>Back <span>(from behind)</span></figcaption>
+        </figure>
+      </div>
+
+      <p class="disclaimer">Labels use elapsed log timing, not a clinical assessment of tissue recovery or safety.</p>
+
+      <ul id="areas" class="areas" aria-label="Areas"></ul>
+      <p id="live" class="live" aria-live="polite" role="status"></p>
+      <button type="button" id="undo" class="ghost" disabled>Undo last entry</button>
+    </section>
+
+    <section class="history" aria-labelledby="hist-title">
+      <div class="row-head">
+        <h2 id="hist-title">History</h2>
+        <div class="tools">
+          <button type="button" id="print" class="ghost">Print rotation sheet</button>
+          <button type="button" id="csv" class="ghost">Export CSV</button>
+          <button type="button" id="json" class="ghost">Export JSON</button>
+        </div>
+      </div>
+      <p id="empty" class="muted">No entries yet.</p>
+      <table id="hist" hidden>
+        <thead><tr><th scope="col">Date</th><th scope="col">Area</th><th scope="col">Label</th><th scope="col"><span class="sr">Actions</span></th></tr></thead>
+        <tbody id="hist-body"></tbody>
+      </table>
+
+      <aside class="cta" aria-label="Get the app">
+        <p>PeptideBro keeps this log on your iPhone, with a schedule and reminders.</p>
+        <a class="store" data-store href="#">Download PeptideBro on the App Store</a>
+      </aside>
+
+      <div class="danger">
+        <button type="button" id="clear" class="ghost warn">Clear all data</button>
+        <div id="confirm" class="confirm" hidden>
+          <p id="confirm-text">Delete every entry stored in this browser? This cannot be undone. Export first if you want a copy.</p>
+          <button type="button" id="confirm-yes" class="warn">Yes, delete everything</button>
+          <button type="button" id="confirm-no" class="ghost">Keep my data</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="wrap">
+    <p>(c) 2026 Fern Labs LLC</p>
+    <p>A personal record-keeping tool. Not medical advice. Follow the instructions from your prescriber or pharmacist.</p>
+  </footer>
+</body>
+</html>

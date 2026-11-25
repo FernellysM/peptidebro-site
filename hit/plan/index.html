@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>HIT Plan Builder: free four-week strength plan</title>
+  <meta name="description" content="Build a free four-week strength plan from your goal, experience, equipment and training days, and check whether to add weight next session. From HIT: Strength Training Log.">
+  <meta name="color-scheme" content="dark">
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="styles.css">
+  <script type="module" src="app.js"></script>
+<link rel="canonical" href="https://peptidebro.app/hit/plan/">
+</head>
+<body>
+  <a class="skip" href="#plan">Skip to your plan</a>
+  <header class="top">
+    <p class="brand"><span class="mark">HIT</span> Plan Builder</p>
+    <p class="tag">Train hard. Know why.</p>
+  </header>
+
+  <main>
+    <section class="panel" aria-labelledby="build-title">
+      <h1 id="build-title">Build my four-week plan</h1>
+      <form id="plan-form" class="settings">
+        <fieldset><legend>Goal</legend><div class="seg" data-name="goal"></div><p class="hint" id="goal-detail"></p></fieldset>
+        <fieldset><legend>Experience</legend><div class="seg" data-name="experience"></div><p class="hint" id="exp-detail"></p></fieldset>
+        <fieldset><legend>Equipment</legend><div class="seg" data-name="preset"></div><p class="hint" id="gear-detail"></p></fieldset>
+        <fieldset><legend>Training days per week</legend><div class="seg" data-name="days"></div></fieldset>
+        <fieldset><legend>Units</legend><div class="seg" data-name="unit"></div></fieldset>
+      </form>
+    </section>
+
+    <section id="plan" class="plan" aria-label="Your four-week plan" tabindex="-1"></section>
+
+    <aside class="cta" aria-label="Get the app">
+      <p>HIT logs every set and makes this call for you after every session.</p>
+      <a class="store" data-store href="#">Download HIT on the App Store</a>
+    </aside>
+
+    <section class="panel" aria-labelledby="check-title" id="checker">
+      <h2 id="check-title">Should I add weight?</h2>
+      <p class="lede">Enter your last session for one lift. The same rules HIT runs after every workout decide what to do next.</p>
+      <form id="check-form" class="check">
+        <div class="row">
+          <label>Exercise type
+            <select name="type" id="c-type"></select>
+          </label>
+          <label>Experience
+            <select name="experience" id="c-exp"></select>
+          </label>
+        </div>
+        <div class="row">
+          <label>Rep range, low<input type="number" name="low" inputmode="numeric" min="1" max="50" value="4" required></label>
+          <label>Rep range, high<input type="number" name="high" inputmode="numeric" min="1" max="50" value="6" required></label>
+          <label>Weight<input type="number" name="weight" inputmode="decimal" min="0" max="2000" step="any" value="185"></label>
+          <label>Units
+            <select name="unit" id="c-unit"><option value="lb">lb</option><option value="kg">kg</option></select>
+          </label>
+        </div>
+        <table class="sets log">
+          <caption>Reps you hit on each set</caption>
+          <thead><tr><th scope="col">Set</th><th scope="col">Reps</th></tr></thead>
+          <tbody id="c-sets"></tbody>
+        </table>
+        <div class="row tools">
+          <button type="button" id="add-set">Add set</button>
+          <button type="button" id="remove-set">Remove set</button>
+        </div>
+        <label class="check-box"><input type="checkbox" name="streak"> Last session, most sets also fell short of the bottom of the range</label>
+        <button type="submit" class="go">Decide</button>
+      </form>
+      <div id="verdict" class="verdict" aria-live="polite" hidden></div>
+      <aside class="cta" aria-label="Get the app">
+        <p>HIT logs every set and makes this call for you after every session.</p>
+        <a class="store" data-store href="#">Download HIT on the App Store</a>
+      </aside>
+    </section>
+  </main>
+
+  <footer>
+    <p>(c) 2026 Fern Labs LLC</p>
+    <p>General training information, not medical advice.</p>
+  </footer>
+</body>
+</html>
