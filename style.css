@@ -281,3 +281,9 @@ footer a {
   .hero-shot img { width: 230px; }
   .nav-cta { display: none; }
 }
+
+/* Five-link nav (home page): stay on one row on phones. */
+@media (max-width: 420px) {
+  header nav.nav-5 { gap: 8px 10px; }
+  header nav.nav-5 a { font-size: 13px; }
+}

@@ -152,3 +152,8 @@ footer p { margin: 0 0 4px; }
   table { border: 1px solid #94a3b8; }
   tr { break-inside: avoid; }
 }
+
+footer a { color: inherit; }
+@media print { [data-site-links] { display: none !important; } }
+.brand a { color: inherit; text-decoration: none; }
+.brand a[href]:hover, .brand a[href]:focus-visible { text-decoration: underline; }

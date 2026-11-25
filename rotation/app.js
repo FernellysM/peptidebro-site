@@ -1,7 +1,7 @@
 // DOM layer. All logic lives in core.js; user labels go in through textContent only.
 import { AREAS, BY_ID, ZONES, FIGURE } from "./areas.js";
 import * as core from "./core.js";
-import { APP_STORE_URL } from "./config.js";
+import { APP_STORE_URL, HOME_URL, SITE_LINKS } from "./config.js";
 
 const $ = (sel) => document.querySelector(sel);
 const SVG = "http://www.w3.org/2000/svg";
@@ -204,6 +204,21 @@ function wire() {
   for (const a of document.querySelectorAll("[data-store]")) {
     a.href = APP_STORE_URL;
     a.rel = "noopener";
+  }
+  const home = document.querySelector("[data-home]");
+  if (home && HOME_URL) home.href = HOME_URL;
+
+  // Links back to the host site. An empty list removes the row.
+  const siteLinks = document.querySelector("[data-site-links]");
+  if (siteLinks) {
+    if (!SITE_LINKS.length) siteLinks.remove();
+    SITE_LINKS.forEach(([label, href], i) => {
+      if (i) siteLinks.append(" \u00b7 ");
+      const a = document.createElement("a");
+      a.href = href;
+      a.textContent = label;
+      siteLinks.append(a);
+    });
   }
   $("#hist-title").tabIndex = -1;
 }

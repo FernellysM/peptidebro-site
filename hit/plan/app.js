@@ -1,7 +1,7 @@
 // DOM layer. All logic lives in core.js; all text goes in through textContent.
 import { BY_ID, PRESETS, GOALS, EXPERIENCE, ROLE_TITLES, EQUIPMENT } from "./catalog.js";
 import * as core from "./core.js";
-import { APP_STORE_URL } from "./config.js";
+import { APP_STORE_URL, SITE_LINKS } from "./config.js";
 
 const $ = (sel, root = document) => root.querySelector(sel);
 function el(tag, attrs = {}, ...kids) {
@@ -173,6 +173,19 @@ function initChecker() {
 }
 
 for (const a of document.querySelectorAll("[data-store]")) a.href = APP_STORE_URL;
+
+// Links back to the host site. An empty list removes the row.
+const siteLinks = document.querySelector("[data-site-links]");
+if (siteLinks) {
+  if (!SITE_LINKS.length) siteLinks.remove();
+  SITE_LINKS.forEach(([label, href], i) => {
+    if (i) siteLinks.append(" \u00b7 ");
+    const a = document.createElement("a");
+    a.href = href;
+    a.textContent = label;
+    siteLinks.append(a);
+  });
+}
 // The skip link must not replace the settings hash, or the share link is lost.
 $(".skip").addEventListener("click", (e) => { e.preventDefault(); $("#plan").focus(); });
 initChecker();
